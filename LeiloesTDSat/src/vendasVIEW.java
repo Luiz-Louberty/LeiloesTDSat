@@ -3,6 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author LuizLouberty
@@ -14,6 +17,7 @@ public class vendasVIEW extends javax.swing.JFrame {
      */
     public vendasVIEW() {
         initComponents();
+        listarProdutos();
     }
 
     /**
@@ -47,6 +51,11 @@ public class vendasVIEW extends javax.swing.JFrame {
         jScrollPane1.setViewportView(listaProdutos);
 
         btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -96,6 +105,10 @@ public class vendasVIEW extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+    dispose();
+    }//GEN-LAST:event_btnVoltarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -139,4 +152,26 @@ public class vendasVIEW extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable listaProdutos;
     // End of variables declaration//GEN-END:variables
+
+    private void listarProdutos() {
+    try {
+        ProdutosDAO produtosdao = new ProdutosDAO();
+        DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
+        model.setNumRows(0); // Limpa a tabela
+
+        ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutosVendidos();
+
+        for (int i = 0; i < listagem.size(); i++) {
+            model.addRow(new Object[]{
+                listagem.get(i).getId(),
+                listagem.get(i).getNome(),
+                listagem.get(i).getValor(),
+                listagem.get(i).getStatus()
+            });
+        }
+    } catch (Exception e) {
+        // Opcional: JOptionPane.showMessageDialog(null, "Erro ao listar vendas");
+    }
+}
+
 }
